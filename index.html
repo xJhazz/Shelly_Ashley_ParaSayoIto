@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be My Valentine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f0f5;
+    }
+    h1 {
+      margin-top: 50px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    #yes {
+      background-color: #ff6f61;
+      color: white;
+    }
+    #no {
+      background-color: #dddddd;
+      color: #333333;
+      position: absolute;
+    }
+    #message {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #333;
+    }
+    #arrow-container {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #ff6f61;
+      display: none;
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+    }
+    #thank-you-message {
+      display: none;
+      font-family: 'Cursive', 'Comic Sans MS', sans-serif;
+      font-size: 36px;
+      color: #ff6f61;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin-top: 20%;
+      animation: fadeIn 2s;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Will you be my valentine?</h1>
+  <div id="buttons">
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+  </div>
+  <div id="arrow-container">⬆️ Click Yes!</div>
+  <div id="message"></div>
+  <canvas id="confettiCanvas"></canvas>
+  <div id="thank-you-message">Thank you very much, I knew you would like to date me as well! ❤️</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    const yesButton = document.getElementById('yes');
+    const noButton = document.getElementById('no');
+    const messageDiv = document.getElementById('message');
+    const arrowContainer = document.getElementById('arrow-container');
+    const confettiCanvas = document.getElementById('confettiCanvas');
+    const confetti = window.confetti.create(confettiCanvas, { resize: true });
+    const thankYouMessage = document.getElementById('thank-you-message');
+    let noClicks = 0;
+
+    noButton.addEventListener('click', () => {
+      noClicks++;
+
+      const randomX = Math.random() * (window.innerWidth - noButton.offsetWidth);
+      const randomY = Math.random() * (window.innerHeight - noButton.offsetHeight);
+      noButton.style.left = `${randomX}px`;
+      noButton.style.top = `${randomY}px`;
+
+      arrowContainer.style.display = 'block';
+
+      switch (noClicks) {
+        case 1:
+          arrowContainer.textContent = '⬆️ Click Yes!';
+          break;
+        case 2:
+          messageDiv.textContent = 'Come on, just say yes!';
+          arrowContainer.textContent = '⬆️ You know you want to!';
+          break;
+        case 3:
+          messageDiv.textContent = 'Please? 🥺';
+          arrowContainer.textContent = '⬆️ Just do it!';
+          break;
+        case 4:
+          messageDiv.textContent = 'It’s not that hard to say yes!';
+          arrowContainer.textContent = '⬆️ Seriously, press Yes!';
+          break;
+        case 5:
+          messageDiv.textContent = 'Do it for me?';
+          arrowContainer.textContent = '⬆️ Last chance!';
+          break;
+        case 6:
+          messageDiv.textContent = 'You’re being difficult 😡';
+          arrowContainer.textContent = '⬆️ Press Yes NOW!';
+          break;
+        case 7:
+          messageDiv.textContent = 'Fine, I’ll take that as a yes!';
+          noButton.style.display = 'none';
+          arrowContainer.style.display = 'none';
+          break;
+      }
+    });
+
+    yesButton.addEventListener('click', () => {
+      for (let i = 0; i < 5; i++) {
+        confetti({
+          particleCount: 150,
+          spread: 360,
+          origin: {
+            x: Math.random(),
+            y: Math.random(),
+          },
+        });
+      }
+
+      // Hide everything else
+      document.body.innerHTML = '';
+      document.body.appendChild(confettiCanvas);
+      thankYouMessage.style.display = 'block';
+      document.body.appendChild(thankYouMessage);
+
+      // Start confetti again for the final touch
+      setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+          confetti({
+            particleCount: 200,
+            spread: 360,
+            origin: {
+              x: Math.random(),
+              y: Math.random(),
+            },
+          });
+        }
+      }, 500);
+    });
+  </script>
+</body>
+</html>
